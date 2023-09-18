@@ -1,0 +1,179 @@
+#include <WiFi.h>
+#include <FirebaseESP32.h>
+#include <LiquidCrystal_I2C.h>
+#include <UniversalTelegramBot.h>
+#include <dht11.h>
+#include <addons/TokenHelper.h>
+#include <addons/RTDBHelper.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+#define WIFI_SSID "Nilesh"
+#define WIFI_PASSWORD "11112222"
+
+#define API_KEY "AIzaSyAECSVk1UiljIhVshws9gAROjmXBgRePKY"
+#define DATABASE_URL "https://pollution-monitoring-6c325-default-rtdb.firebaseio.com/" 
+#define USER_EMAIL "warkenilesh3172@gmail.com"
+#define USER_PASSWORD "warkenilesh3172"
+
+FirebaseData fbdo;
+FirebaseAuth auth;
+FirebaseConfig config;
+FirebaseData firebaseData;
+FirebaseJson json;
+
+
+//telegram bot
+WiFiClientSecure client;
+#define BOTtoken "5657684249:AAEA7P5iyZWVrEYRIhK594OkbZH0p8J7HrE"
+#define CHAT_ID "1457594471"
+UniversalTelegramBot bot("5657684249:AAEA7P5iyZWVrEYRIhK594OkbZH0p8J7HrE", client);
+
+//sensors
+#define co2_sensor 34
+#define co_sensor 35
+#define temp_sensor 33
+#define control_pin 14
+
+bool control = false;
+void emergency_checkup_on(String name,int* flag)
+{
+      bot.sendMessage("1457594471", name + " is out of limit", "");
+      digitalWrite(control_pin,LOW);
+     // delay(1000);
+      *flag = 1;
+}
+
+void emergency_checkup_off(String name,int* flag)
+{
+  bot.sendMessage("1457594471", name + " is in limit", "");
+  *flag = 0;
+  digitalWrite(control_pin,HIGH);
+ // delay(1000);
+}
+
+
+dht11 DHT11;
+
+
+class air {
+public:
+  String name;
+  int reading;
+  int limit;
+  int sensor_lower_limit;
+  int sensor_higher_limit;
+  int flag;
+
+  air() {
+    name = "";
+    limit = 0;
+    reading = 0;
+    flag = 0;
+  }
+  void limit_checking()
+  {
+    if(reading>=limit && flag == 0)
+    {
+      emergency_checkup_on(name,&flag);
+    }  
+    else if(reading<limit && flag ==1)
+    {
+      emergency_checkup_off(name, &flag);
+    }
+      
+  }
+  void lcd_display(int c1, int r1,int c2 ,int r2)
+  {
+    lcd.setCursor(c1,r1);
+    lcd.print(name);
+    lcd.setCursor(c1+name.length(),r1);
+    lcd.print(":");
+    lcd.setCursor(c2, r2);
+    lcd.print(reading);
+  }
+};
+
+air co,co2,temp,humidity;
+
+void setup()
+{
+
+  Serial.begin(9600);
+  lcd.begin();
+  lcd.backlight();
+  client.setCACert(TELEGRAM_CERTIFICATE_ROOT);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print(".");
+    delay(300);
+  }
+  lcd.clear();
+  lcd.print("Wifi Connected");
+  bot.sendMessage("1457594471","Pollution Monitoring Started", "");
+  Serial.printf("Firebase Client v%s\n\n", FIREBASE_CLIENT_VERSION);
+
+  config.api_key = API_KEY;
+  auth.user.email = USER_EMAIL;
+  auth.user.password = USER_PASSWORD;
+  config.database_url = DATABASE_URL;
+  config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
+  Firebase.begin(&config, &auth);
+  Firebase.reconnectWiFi(true);
+  Firebase.setDoubleDigits(5);
+  pinMode(co2_sensor, INPUT);
+  pinMode(co_sensor, INPUT);
+
+  pinMode(control_pin,OUTPUT);
+  digitalWrite(control_pin,HIGH);
+   
+}
+
+void loop()
+{
+  int chk = DHT11.read(temp_sensor);
+  
+  if (analogRead(co2_sensor) < sensor_lower_limit && analogRead(co2_sensor) > sensor_higher_limit) {
+    co2.reading = -1;
+    bot.sendMessage("1457594471","Check CO2 Sensor", "");
+  }
+  else co2.reading = analogRead(co2_sensor);
+  co.reading = analogRead(co_sensor);
+  temp.reading = DHT11.temperature;
+  humidity.reading = DHT11.humidity;
+
+
+  // name
+  co2.name = "CO2";
+  co.name = "CO";
+  temp.name = "TEMP";
+  humidity.name = "HUMI";
+
+  //limits
+  co2.limit = 500;
+  co.limit = 300;
+  temp.limit = 40;
+  
+  co.limit_checking();
+  co2.limit_checking();
+  temp.limit_checking();
+
+
+  json.set(co.name, co.reading); // Place your sensor data here
+  json.set(co2.name, co2.reading); // Place your sensor data here
+  json.set(temp.name, temp.reading); // Place your sensor data here
+  json.set(humidity.name, humidity.reading); // Place your sensor data here
+ 
+  Firebase.updateNode(firebaseData,"/data",json);
+  
+  lcd.clear();
+  co.lcd_display(0, 0, 3, 0);
+  co2.lcd_display(8, 0, 12, 0);
+  temp.lcd_display(0, 1, 5, 1);
+  humidity.lcd_display(8, 1, 13, 1);
+  delay(2000);
+
+}
