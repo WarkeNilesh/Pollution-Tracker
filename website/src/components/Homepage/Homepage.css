@@ -1,0 +1,184 @@
+
+.header{
+  background-color: aqua;
+}
+.advantage
+{
+  background-color: white;
+
+}
+.application
+{
+  background-color: #1c1842;
+}
+.advantage h1
+{
+  padding: 20px;
+  margin: 20px;
+  margin-left: 40px;
+  font-size: 50px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #05022395;
+}
+.adv
+{
+  font-size: 30px;
+    padding: 40px;
+  margin-left: 60px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}  
+.adv
+{
+  padding: 20px;
+}
+
+.navbar-brand
+{
+    text-align: center;
+    text-decoration: double;
+    font-size:40px; 
+    height: 40%;
+    padding: 10px;
+    color: white;
+}
+.nav-link{
+  font-size: 20px;
+  color: white;
+}
+
+.flexbox{
+    padding: 40px;
+    display: flex;
+    flex-wrap: wrap ;
+    align-items:flex-start;
+    width: 100%;
+    height: auto;
+    
+}
+
+.flexbox1,
+.flexbox2
+{
+    padding: 20px;
+    text-align: center;
+}
+.flexbox1
+{
+    width:60vw;
+    text-align: left;
+    font-size: 33px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    line-height: 50px;
+    word-spacing: 2px;
+}
+.flexbox2
+{
+    width: 30vw;
+    float: right;
+}
+.flexbox2 img{
+  width: 33vw;
+  height: 20vw;
+  margin-top: 50px;
+ 
+}
+
+.intro
+{
+   width: 100vw;
+   height: 90vh;
+   
+}
+
+.flex
+{
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+}
+.bg
+{
+  background: url(https://images.unsplash.com/photo-1485470733090-0aae1788d5af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1517&q=80);
+}
+.tab11
+{
+  font-size: 30px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+}
+#btn-logic{
+  color:white ;
+  border-color: white;
+  margin-right: 20px;
+}
+.navbar{
+  margin-left: 40px;
+}
+.tab11{
+  text-indent: 8em;
+}
+
+
+.card-text
+{
+  color: white;
+
+}
+.app-title{
+  color: white;
+  padding: 20px;
+  margin: 20px;
+  margin-left: 40px;
+  font-size: 50px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.row{
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 5px;
+}
+.card {
+  /* float: left; */
+  max-width: 33.333%;
+  padding: 50px;
+  margin-bottom: 2rem;
+  border: 0;
+  flex-basis: 33.333%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  color: white;
+}
+
+.card > img {
+  margin-bottom: .75rem;
+  width: 100%;
+}
+
+.card-text {
+  font-size: 85%;
+  color: white;
+}
+.tab1 {
+  display: inline-block;
+
+}
+.btn-f
+{
+padding: 5px;
+}
+.card
+{
+background-color: #1c1842;
+
+border-left: 2px solid white;
+}
+.card h2
+{
+padding-bottom: 3px;
+color: white;
+font-size: 100%;
+}
