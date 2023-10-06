@@ -19,11 +19,6 @@ goes down beyond a certain level.
 ![image](https://drive.google.com/uc?export=view&id=1PQtIzPi2Bfda-CKPT0yDFSUkvoL5Tfdp)
 
 
-
-## DEMO
-https://user-images.githubusercontent.com/110488100/229421221-0f8f7686-cce3-46e4-9702-64d08d407a37.mp4
-
-
 ## Documentation
 
 [report](https://github.com/WarkeNilesh/Pollution-Monitoring-System/files/12240519/report.pdf)
